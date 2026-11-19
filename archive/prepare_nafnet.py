@@ -1,3 +1,10 @@
+"""
+One-time extraction utility.
+It reads external/NAFNet and overwrites nafnet.py and NAFNet_LICENSE.txt.
+The pipeline uses the committed copies directly.
+"""
+
+
 import ast
 import shutil
 from pathlib import Path

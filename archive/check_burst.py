@@ -1,3 +1,9 @@
+"""
+Seeded visual check for synthetic noise.
+Prints burst and noise-map shapes and displays the clean and noisy reference frames.
+Useful when changing the noise model.
+"""
+
 from pathlib import Path
 import numpy as np
 from PIL import Image

@@ -1,3 +1,8 @@
+"""
+Standalone CUDA setup check.
+It runs and synchronizes an actual GPU matrix multiply, which is useful when setting up another machine.
+"""
+
 import torch
 
 print("PyTorch version:", torch.__version__)

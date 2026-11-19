@@ -1,3 +1,9 @@
+"""
+Runs one GPU forward pass and asserts output shape and finite values.
+Useful after model changes.
+"""
+
+
 from pathlib import Path
 
 import torch
@@ -28,38 +34,21 @@ def main():
     noisy = batch["noisy"].to("cuda")
     clean = batch["clean"].to("cuda")
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-    loss_fn = torch.nn.L1Loss()
-
-    model.train()
-
-    # Keep noisy and clean fixed throughout this check
-    with torch.no_grad():
-        initial_loss = loss_fn(model(noisy), clean).item()
-
-    print(f"Before training: {initial_loss:.6f}")
-
-    for step in range(1, 101):
-        optimizer.zero_grad(set_to_none=True)
-
-        prediction = model(noisy)
-        loss = loss_fn(prediction, clean)
-
-        if not torch.isfinite(loss).item():
-            raise RuntimeError("Training loss became NaN or infinite.")
-
-        loss.backward()
-        optimizer.step()
-
-        if step == 1 or step % 20 == 0:
-            print(f"Step {step:3d}/100 — L1 loss: {loss.item():.6f}")
-
     model.eval()
 
     with torch.no_grad():
-        final_loss = loss_fn(model(noisy), clean).item()
+        prediction = model(noisy)
+        loss = torch.nn.functional.l1_loss(prediction, clean)
 
-    print(f"After training:  {final_loss:.6f}")
+    assert prediction.shape == clean.shape
+    assert torch.isfinite(prediction).all().item()
+
+    print("Input:", noisy.shape)
+    print("Output:", prediction.shape)
+    print("Target:", clean.shape)
+    print(f"Initial L1 loss: {loss.item():.6f}")
+    print("Forward pass passed")
+
 
 if __name__ == "__main__":
     main()
