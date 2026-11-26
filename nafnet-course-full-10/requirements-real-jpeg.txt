@@ -1,0 +1,4 @@
+# Additional packages for the real-photo evaluator in the DSC4008 environment.
+opencv-python-headless==4.14.0.94
+lpips==0.1.4
+pytorch-msssim==1.0.0

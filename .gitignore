@@ -6,3 +6,11 @@ checkpoints*/
 external/
 .env
 .env.*
+
+.torch_cache/
+runs/
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.zip
